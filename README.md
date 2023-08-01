@@ -3,6 +3,12 @@ This github repository contains the progress made in asic
 
 [Day 0](#day-0)
 ## Day 0
+
+<details>
+ <summary> summary </summary>
+  installed and launched the required tools
+</details>
+
 <details>
  <summary> Yosys </summary>
 
@@ -104,4 +110,6 @@ screenshot of magic successfully launched
 ![Screenshot from 2023-08-01 11-28-15](https://github.com/simarthethi/iiitb-asic/assets/140998783/4db4a9e7-6c8e-4e74-a672-0bebaa594885)
 
 ![Screenshot from 2023-08-01 11-28-30](https://github.com/simarthethi/iiitb-asic/assets/140998783/9056e4bf-3fd2-4a07-8573-fd258089822e)
+
+
 
