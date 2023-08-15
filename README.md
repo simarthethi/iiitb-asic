@@ -126,10 +126,10 @@ This section shows how I simulated and synthesized a 2x1 mux using iverilog and 
 <details>
 
 <summary> Introduction to RTK design and Synthesis </summary>
-**Simulator**: The RTL design is checked for adherence to the spec by simulating the design.
+** Simulator **: The RTL design is checked for adherence to the spec by simulating the design.
 Simulator is the tool used for simulating the design.
-**RTL Design**: the RTL Design is the actual verilog code or set of codes which has the intended functionality to meet with the required specifications.
-**Testbech**: Testbench is the setup to apply stimulus to the design to check its functionality.
+** RTL Design **: the RTL Design is the actual verilog code or set of codes which has the intended functionality to meet with the required specifications.
+** Testbench **: Testbench is the setup to apply stimulus to the design to check its functionality.
 
 The simulator looks for changes on the input signls. Upon chnages to he input the output is evaluated 
 
