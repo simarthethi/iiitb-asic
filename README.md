@@ -364,8 +364,16 @@ show multiple_modules
 ![vsd day_2 show multiple module flat](https://github.com/simarthethi/iiitb-asic/assets/140998783/75a2d5e4-4bce-4b08-adcb-d3e6037e3f76)
 We saw how to synthesis the top module, now we will look into synthesis of submodules.
 ![vsd say_2 show sub_module 1](https://github.com/simarthethi/iiitb-asic/assets/140998783/e7a8c22e-b586-47e0-8e14-e18bf1977fa9)
+- We only see submodule 1, we don't get to see the multiple module or submodule 2.
 
-
+</details>
+<details>
+<summary> Various Flop coding styles and optimizations </summary>
+Under this section, we go through all the various types of flops available and how to design and 
+code them efficiently. All the required files are presen in the folder verilog_files.
+To understand the need of flops, we refer the example of a simple circuit with delays as 2ns for 
+and gate and 1ns for or gate.
+![Screenshot from 2023-08-16 01-14-56](https://github.com/simarthethi/iiitb-asic/assets/140998783/823b6384-2b96-4bf6-9f9e-29960f572b73)
 
 
 
