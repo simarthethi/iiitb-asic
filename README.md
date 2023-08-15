@@ -373,7 +373,22 @@ Under this section, we go through all the various types of flops available and h
 code them efficiently. All the required files are presen in the folder verilog_files.
 To understand the need of flops, we refer the example of a simple circuit with delays as 2ns for 
 and gate and 1ns for or gate.
+ 
 ![Screenshot from 2023-08-16 01-14-56](https://github.com/simarthethi/iiitb-asic/assets/140998783/823b6384-2b96-4bf6-9f9e-29960f572b73)
+
+
+- Considering the input goes from 0 to 1 for a and b and simultaneously, 1 to 0 for c.
+- Ideally for the transition from (001) to (110), the output should have been a constant at 1,
+but because of the delay, we get outout as 0 for a brief period of 2ns.
+- This is called a glitch.
+![Screenshot from 2023-08-16 01-17-36](https://github.com/simarthethi/iiitb-asic/assets/140998783/32a7f827-b33c-4083-9ae7-ed5ddd611cba)
+
+- More the number of combinational circuits, more number of glitches appear, giving a glitchy output.
+- To avoid this, we need an element to store the value. Comes the flops into picture.
+- We use a D flipflop. They are a storage element. They are placed between combinational circuits and changes value only at clock edge.
+![Screenshot from 2023-08-16 01-19-10](https://github.com/simarthethi/iiitb-asic/assets/140998783/6f21888e-78ba-4fb3-a203-feb739b160ac)
+
+
 
 
 
