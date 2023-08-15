@@ -505,7 +505,56 @@ endmodule
 
 - We see that there are no standard cells required.
 - We see the concatanation operation done in the netlist.
+</details>
 
+## Day 3
+<details>
+<summary> Summary </summary>
+I have synthesized designs with optimizations. Combinational logic optimizations include 1-) 
+constant propagation (when the combination is just propagating a constant) and 2-) boolean logic 
+optimization (when boolean rules are used to simplify the expression). Sequential logic 
+optimizations include 1-) sequential constant propagation (when constant is propagated with clock 
+involved), 2-) state optimization (when unused states are optimized), 3-) retiming (when logic is 
+split to decrease timing of the different logic portions and increase frequency), and 4-) 
+sequential logic cloning (when physical aware synthesis is done to optimize the floop plan)
+</details>
+<details>
+<summary> Introduction to Optimizations </summary>
+Optimising the combinational logic circuit is squeezing the logic to get the most optimized digital design so that the circuit finally is area and power efficient. This is achieved by the synthesis tool using various techniques and gives us the most optimized circuit.
+
+**Techniques for optimization**:
+
+- Constant propagation which is Direct optimizxation technique
+- Boolean logic optimization using K-map or Quine McKluskey
+
+Here is an example for **Constant Propagation**
+![Screenshot from 2023-08-16 02-25-21](https://github.com/simarthethi/iiitb-asic/assets/140998783/ab9cedb8-4671-4beb-a244-0cbe24c3f7db)
+In the above example, if we considor the trasnsistor level circuit of output Y, it has 6 MOS trasistors and when it comes to invertor, only 2 transistors will be sufficient. This is achieved by making A as contstant and propagating the same to output.
+</details>
+<details>
+<summary> Combinational logic optimizations </summary>
+
+Let's consider an example concurrent statement assign **y=a?(b?c:(c?a:0)):(!c)**
+
+The above expression is using a ternary operator which realizes a series of multiplexers, however, when we write the boolean expression at outputs of each mux and simplify them further using boolean reduction techniques, the outout y turns out be just **~(a^c)**
+
+Command to optimize the circuit by yosys is
+```bash
+yosys> opt_clean -purge
+```
+opt_clean remove unused cells and wires. The -purge switch removes internal nets if they have a public name. This command identifies wires and cells that are unused and removes them. This command can be used to clean up after the commands that do the actual work.
+
+In case of multiple models, it is important to flatten the design then followup with optimization.
+
+**Lab 1-opt_check.v**
+**RTL code**
+```bash
+module opt_check (input a , input b , output y);
+	assign y = a?b:0;
+endmodule
+```
+- after synthesis on yosys
+![vsd day_3 opt_check graphical rep](https://github.com/simarthethi/iiitb-asic/assets/140998783/e183fdc0-3fea-40e3-ac35-2d4f7102d49e)
 
 
 
