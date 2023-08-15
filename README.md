@@ -439,6 +439,75 @@ endmodule
 ![vsd day_2 dff async set](https://github.com/simarthethi/iiitb-asic/assets/140998783/fc3ff189-8c67-478a-9ce3-fe12772e468c)
 ![gtkwave dff async set](https://github.com/simarthethi/iiitb-asic/assets/140998783/2f11ebf4-4daa-4b12-b53f-dd841782cf6d)
 
+- We can observe that the output q goes to 1 as soon as we encounter the set irrespective of that clock. -Now we synthesis the design using yosys.
+![vsd day_2 graphical dff  asynset](https://github.com/simarthethi/iiitb-asic/assets/140998783/d64f3b85-e656-4ac1-b58b-a48b000f0274)
+
+**RTL code for dff_syncres**
+```bash
+module dff_syncres ( input clk ,  input sync_reset , input d , output reg q );
+always @ (posedge clk )
+begin
+	if(sync_reset)
+		q <= 1'b0;
+	else	
+		q <= d;
+end
+endmodule
+```
+- Upon executing iverilog and gtkwave
+![vsd day_2 syncres](https://github.com/simarthethi/iiitb-asic/assets/140998783/988d2164-d386-4cbe-9de9-bf4178a15979)
+![gtkwave dff syncres](https://github.com/simarthethi/iiitb-asic/assets/140998783/541ecbfa-0abd-4983-bee4-27ba81108523)
+- It is observed that the output q is set to 0 at the next clock pulse when the reset is encountered, thus it is the case of sync reset.
+- Now we synthesis the design using yosys.
+![vsd day_2 graphical repp dff syncres](https://github.com/simarthethi/iiitb-asic/assets/140998783/b473d2c0-9789-472f-bd15-7e33485c943f)
+
+</details>
+<details>
+<summary> Interesting Optimisations</summary>
+Under this section we look into two interesting cases and how they are executed and designed.
+
+First we look into mul2.v
+
+- Code for mul2.v
+```bash
+module mul2 (input [2:0] a, output [3:0] y);
+	assign y = a * 2;
+endmodule
+```
+- The block diagram and the truth table for the executed logic is shown under.
+![Screenshot from 2023-08-16 02-08-26](https://github.com/simarthethi/iiitb-asic/assets/140998783/d9b3bdff-8374-463d-913c-88db7e39d59b)
+
+- From these, we are able to infer that the logic requires the input to be multiplied with 2, and upon checking the output it is the input with 1'b0 padding.
+- Thus the design for the logic needs no hardware to be mapped.
+- We will confirm this using yosys.
+![Screenshot from 2023-08-16 02-11-02](https://github.com/simarthethi/iiitb-asic/assets/140998783/c746b58e-d304-4586-a3a5-6b4b272ac42f)
+
+- From the yosys synthesis, we observe the number of cells in design is 0 and there is no hardware to be mapped. These have been highlighted in the picture above.
+- The schematic attained shows a similar result.
+- This was done in case of multiplication with 2. For multiplication with 4, we give 2'b00 padding and for 8, we give 3'b000 padding. This goes on.
+
+Now, we look into another special case.
+
+- Condider a 3bit number a[2:0], and the logic to be implemented is that the output y[5:0] is equal to 9 times of a[2:0].
+- Code for execution
+```bash
+module mult8 (input [2:0] a , output [5:0] y);
+	assign y = a * 9;
+endmodule
+```
+- explanation
+![Screenshot from 2023-08-16 02-13-28](https://github.com/simarthethi/iiitb-asic/assets/140998783/df14eb46-1a54-4e03-a098-54ce543cf23e)
+
+- Multiplcation with 9 can be seen as multiplication with 8 and plus 1.
+- We know multiplication with 8 is equal to 3'b000 padding, and adding the same 3 bit number to the padded number comes of as concatanation of {a,a}.
+- Thus there are no standard cell required for the design. We verify this using yosys.
+![Screenshot from 2023-08-16 02-15-45](https://github.com/simarthethi/iiitb-asic/assets/140998783/20c612e7-3e59-4b14-9931-2d1810ede082)
+
+- We see that there are no standard cells required.
+- We see the concatanation operation done in the netlist.
+
+
+
 
 
 
