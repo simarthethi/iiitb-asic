@@ -767,7 +767,90 @@ endmodule
 -optimization using yosys
 ![vsd day_3 dff const4 optimized](https://github.com/simarthethi/iiitb-asic/assets/140998783/d9f5472b-57ae-47d6-9c11-ade0bced8a5d)
 
-       
+**Lab_5 dff_const5.v**
+**RTL code**
+```bash
+
+module dff_const5(input clk, input reset, output reg q);
+reg q1;
+
+always @(posedge clk, posedge reset)
+begin
+	if(reset)
+	begin
+		q <= 1'b0;
+		q1 <= 1'b0;
+	end
+	else
+	begin
+		q1 <= 1'b1;
+		q <= q1;
+	end
+end
+
+endmodule
+```
+-simulation using iverilog and gtkwave
+![vsd day_3 dff const5 gtkwve](https://github.com/simarthethi/iiitb-asic/assets/140998783/1aed74f1-3d7b-4a4f-9015-04132931a247)
+
+-optimization using yosys
+![vsd day_3 dff const5 optimized](https://github.com/simarthethi/iiitb-asic/assets/140998783/5f300a0e-6cd2-44b5-8cd1-d325cec47001)
+</details>
+
+<details>
+<summary> Sequential optimizations for unused outputs </summary>
+Under this section, we look into how yosys synthesizer optimises the design in case of unused 
+bits in the output. For this we have taken a 3 bit counter. In case 1, only the LSB is taken as 
+final output, thus the first two are left unused. In case two, we take the entire 3 bits as 
+output.
+	
+![Screenshot from 2023-08-16 04-06-54](https://github.com/simarthethi/iiitb-asic/assets/140998783/eedb31eb-4f6e-4410-b2e3-451949e77d43)
+**Lab_1 using count[0]**
+**RTL code**
+```bash
+module counter_opt (input clk , input reset , output q);
+reg [2:0] count;
+assign q = count[0];
+
+always @(posedge clk ,posedge reset)
+begin
+	if(reset)
+		count <= 3'b000;
+	else
+		count <= count + 1;
+end
+
+endmodule
+```
+-synthesis using yosys
+![vsd day_3synthesis counter_opt](https://github.com/simarthethi/iiitb-asic/assets/140998783/4fe0b2f0-cf01-4021-bcbd-4d0da528d393)
+![vsd day_3 counter opt rep](https://github.com/simarthethi/iiitb-asic/assets/140998783/dd3a6bdf-be61-4155-9974-fc74b8c9a107)
+
+**Lab_2 using all three bits count[2] and count[1] and count[0]
+**RTL code**
+```bash
+module counter_opt (input clk , input reset , output q);
+reg [2:0] count;
+assign q = count[2:0] == 3'b100;
+
+always @(posedge clk ,posedge reset)
+begin
+	if(reset)
+		count <= 3'b000;
+	else
+		count <= count + 1;
+end
+```
+- synthesis using yosys
+![vsd day_3 counter_opt2](https://github.com/simarthethi/iiitb-asic/assets/140998783/4e5ce863-ebb2-415a-95ed-7138ede79eca)
+![counter opt2 plot](https://github.com/simarthethi/iiitb-asic/assets/140998783/5b922011-1080-4f1e-ae08-e2903129ee52)
+- In the yosys generation, we see the design has encorporated 3 dff for the 3 bit counter.
+- It is evident that the yosys synthesizer optimizes for the unsed bits in the output. This so important as illustrated because it saves a ton of space, and speed, and improves efficiency of the final design.
+ </details> 
+
+endmodule
+
+
 
 
 
