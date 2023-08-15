@@ -522,7 +522,7 @@ sequential logic cloning (when physical aware synthesis is done to optimize the 
 <summary> Introduction to Optimizations </summary>
 Optimising the combinational logic circuit is squeezing the logic to get the most optimized digital design so that the circuit finally is area and power efficient. This is achieved by the synthesis tool using various techniques and gives us the most optimized circuit.
 
-**Techniques for optimization**:
+**Techniques for optimization for combinational logic**:
 
 - Constant propagation which is Direct optimizxation technique
 - Boolean logic optimization using K-map or Quine McKluskey
@@ -530,6 +530,39 @@ Optimising the combinational logic circuit is squeezing the logic to get the mos
 Here is an example for **Constant Propagation**
 ![Screenshot from 2023-08-16 02-25-21](https://github.com/simarthethi/iiitb-asic/assets/140998783/ab9cedb8-4671-4beb-a244-0cbe24c3f7db)
 In the above example, if we considor the trasnsistor level circuit of output Y, it has 6 MOS trasistors and when it comes to invertor, only 2 transistors will be sufficient. This is achieved by making A as contstant and propagating the same to output.
+**Techniquies for Sequentional logic otimizations**
+Below are the various techniques used for sequential logic optimisations:
+- Basic
+   Sequential contant propagation
+- Advanced
+   State optimisation
+   Retiming
+   Sequential Logic Cloning (Floor Plan Aware Synthesis)
+
+-  The input of D ff is grounded, ir d=0, and the reset parameter is given. Here even if the
+  reset is given or not the output output of the flop is constant at 0, hence the overall outcome
+  is constant.
+   ![Screenshot from 2023-08-16 03-38-37](https://github.com/simarthethi/iiitb-asic/assets/140998783/ae8fb30a-17b9-4ab9-9a64-0a96a03283bc)
+- Now taking the same circuit, but instead of reset, we give set. Now when the set is 1, the flop
+output follows set. As soon as set is removed, the output goes to 0 at the next positive clock
+edge. Thus now we can't remove the flop from design, Thus we retain the flop.
+![Screenshot from 2023-08-16 03-41-14](https://github.com/simarthethi/iiitb-asic/assets/140998783/a95b3c4d-6e08-4362-a4e4-7cd7fa167e01)
+**Advanced Methods for Sequential logic Optimisation**
+
+- State optimization in ASIC design is about finding the best trade-offs among performance, power
+efficiency, area utilization, and other design objectives to create an effective and efficient
+custom integrated circuit for a particular application.
+- Re-timing is the technique used to optimize the timing performance of a digital circuit by
+moving registers (flip-flops) to different locations within the circuit without changing its
+functionality. The primary goal of retiming is to improve the critical path delay, which is the
+longest path through the logic circuit that determines the maximum operating frequency.
+- Sequential logic cloning or flip-flop cloning or state machine cloning is the technique used to
+replicate or duplicate certain portions of sequential logic circuits. This technique is employed
+to improve performance, reduce critical path delays, or optimize power consumption in a design
+without altering its functional behavior.
+
+
+
 </details>
 <details>
 <summary> Combinational logic optimizations </summary>
@@ -544,6 +577,8 @@ yosys> opt_clean -purge
 ```
 opt_clean remove unused cells and wires. The -purge switch removes internal nets if they have a public name. This command identifies wires and cells that are unused and removes them. This command can be used to clean up after the commands that do the actual work.
 
+
+
 In case of multiple models, it is important to flatten the design then followup with optimization.
 
 **Lab 1-opt_check.v**
@@ -556,7 +591,125 @@ endmodule
 - after synthesis on yosys
 ![vsd day_3 opt_check graphical rep](https://github.com/simarthethi/iiitb-asic/assets/140998783/e183fdc0-3fea-40e3-ac35-2d4f7102d49e)
 
+**Lab_2 opt_check2.v**
+**RTL code**
+```bash
+module opt_check2 (input a , input b , output y);
+	assign y = a?1:b;
+endmodule
+```
+- Hardware after synthesis on yosys
+![vsd day_3 opt_check2 graphical re](https://github.com/simarthethi/iiitb-asic/assets/140998783/25d4ad53-b091-4e73-a021-0710b05f49c2)
 
+**Lab_3 opt_check3.v**
+**RTL code**
+```bash
+module opt_check3 (input a , input b, input c , output y);
+	assign y = a?(c?b:0):0;
+endmodule
+```
+- hardware after synthesis on yosys
+![vsd day_3 pot_check3 graphical_rep](https://github.com/simarthethi/iiitb-asic/assets/140998783/ced19225-4aba-4b54-b8b8-aa20aa73f2f6)
+
+**Lab_4 opt_check4.v**
+**RTL code**
+```bash
+module opt_check4 (input a , input b , input c , output y);
+ assign y = a?(b?(a & c ):c):(!c);
+ endmodule
+```
+- Hardware  after synthesis on yosys
+![vsd day_3 optcheck4](https://github.com/simarthethi/iiitb-asic/assets/140998783/4c160fee-16f7-4caa-abe3-ba6365af6e3c)
+**Lab_5 multiple_module_opt.v
+**RTL code**
+```bash
+module sub_module1(input a , input b , output y);
+ assign y = a & b;
+endmodule
+
+
+module sub_module2(input a , input b , output y);
+ assign y = a^b;
+endmodule
+
+
+module multiple_module_opt(input a , input b , input c , input d , output y);
+wire n1,n2,n3;
+
+sub_module1 U1 (.a(a) , .b(1'b1) , .y(n1));
+sub_module2 U2 (.a(n1), .b(1'b0) , .y(n2));
+sub_module2 U3 (.a(b), .b(d) , .y(n3));
+
+assign y = c | (b & n1); 
+
+
+endmodule
+```
+- Hardware after synthesis on yosys
+![multiple module opt](https://github.com/simarthethi/iiitb-asic/assets/140998783/e9973120-4219-459f-bb08-12173655c4ec)
+**Lab_6 multiple_modules_opt2.v**
+**RTL code**
+```bash
+ module sub_module(input a , input b , output y);
+ assign y = a & b;
+endmodule
+
+
+
+module multiple_module_opt2(input a , input b , input c , input d , output y);
+wire n1,n2,n3;
+
+sub_module U1 (.a(a) , .b(1'b0) , .y(n1));
+sub_module U2 (.a(b), .b(c) , .y(n2));
+sub_module U3 (.a(n2), .b(d) , .y(n3));
+sub_module U4 (.a(n3), .b(n1) , .y(y));
+
+
+endmodule
+```
+- Hardware after yosys synthesis
+![multiple module opt2](https://github.com/simarthethi/iiitb-asic/assets/140998783/e5acbb37-713d-43b2-a533-35605cc4bcf2)
+</details>
+
+<details>
+<summary> Sequentional Logic Optimizations </summary>
+
+**Lab_1 dff_const1.v**
+**RTL code**
+```bash
+module dff_const1(input clk, input reset, output reg q);
+always @(posedge clk, posedge reset)
+begin
+	if(reset)
+		q <= 1'b0;
+	else
+		q <= 1'b1;
+end
+
+endmodule
+```
+- Simulation on iverilog and gtkwave
+![vsd day_3 dff const1 gtkwave](https://github.com/simarthethi/iiitb-asic/assets/140998783/0c34fb67-1edc-499f-a9f3-254c67ee0c22)
+- optimization using yosys
+![vsd day_3 dff const optimized ckt](https://github.com/simarthethi/iiitb-asic/assets/140998783/1f70cea5-cf81-47db-b429-f56f5ce9db23)
+
+**Lab_2 dff_const2.v**
+**RTL code**
+```bash
+module dff_const2(input clk, input reset, output reg q);
+always @(posedge clk, posedge reset)
+begin
+	if(reset)
+		q <= 1'b1;
+	else
+		q <= 1'b1;
+end
+
+endmodule
+```
+-Simulation using iverilog and yosys
+
+       
 
 
 
