@@ -423,6 +423,23 @@ On execution of iverilog and gtkwave we get
 ![vsd day_2yosys dff asyncres](https://github.com/simarthethi/iiitb-asic/assets/140998783/e8c03f69-9d14-4824-bf0a-535504d8bec8)
 ![vsd day_2 reading dff ayncres](https://github.com/simarthethi/iiitb-asic/assets/140998783/dd54d587-e4e1-4128-8a79-68370e35b5e2)
 
+**RTL design of dff_async_set**
+```bash
+module dff_async_set ( input clk ,  input async_set , input d , output reg q );
+always @ (posedge clk , posedge async_set)
+begin
+	if(async_set)
+		q <= 1'b1;
+	else	
+		q <= d;
+end
+endmodule
+```
+- upon execution on terminal using iverilog and gtkwave
+![vsd day_2 dff async set](https://github.com/simarthethi/iiitb-asic/assets/140998783/fc3ff189-8c67-478a-9ce3-fe12772e468c)
+![gtkwave dff async set](https://github.com/simarthethi/iiitb-asic/assets/140998783/2f11ebf4-4daa-4b12-b53f-dd841782cf6d)
+
+
 
 
 
