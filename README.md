@@ -258,6 +258,15 @@ read_verilog -noattr good_mux_netlist.v
 ```
 ![vsd day_1 netlist diagram](https://github.com/simarthethi/iiitb-asic/assets/140998783/b9617e24-c0f7-47ec-9324-36637d712d64)
 </details>
+<details>
+<summary> Heirarchial vs Flat Synthesis </summary>
+Under this section, we go over what is heirchial synthesis and flat synthesis. For this, we have taken the case of multiple_modul2s.v from verilog files to have a better unstanding.
+
+```bash
+simar-thethi@simar-thethi-Inspiron-3542:~/vsd/VLSI/sky130RTLDesignAndSynthesisWorkshop/verilog_files$ multiple_modules.v
+```
+![vsd day_2 gvimultiple module](https://github.com/simarthethi/iiitb-asic/assets/140998783/f08a2435-b0d5-4196-9413-42419fb33adf)
+
 
 
 
