@@ -258,9 +258,43 @@ read_verilog -noattr good_mux_netlist.v
 ```
 ![vsd day_1 netlist diagram](https://github.com/simarthethi/iiitb-asic/assets/140998783/b9617e24-c0f7-47ec-9324-36637d712d64)
 </details>
+## Day 2
+<details>
+ <summary> Summary </summary>
+ I first synthesized a multiple module (made of two submodules) at the multiple module level 
+ (both in hierarchical and flattened forms) then at the submodule level. Synthesis at the 
+ submodule level is important for two reasons: 1-) when we have multiple instances of same module 
+ (we synthesize once and replicate this netlist multiple times and stitch together the replicas 
+ to get the multiple module netlist, and 2-) when we want to divide and conquer (in massive 
+ designs) so that the tool can generate a portion by portion of the overall netlist and then we 
+ can stitch together the netlist portions to get the multiple module netlist. After that, I 
+ sumulated the different flop designs using iverilog and gtkwave, then synthesized the designs. 
+ Finally, I synthesized 2 designs that were special; their synthesis used optimizations.
+</details>
+<details>
+ <summary> Introduction to .lib </summary>
+Under this section, we get a better insight regarding .lib. We have the general overview that it 
+stores the models of all the standards cells, various variations and flavours as per the need of 
+specification provided. Getting an insight into the .lib file, we start with the file name -
+
+sky130_fd_sc_hd__tt_025C_1v80  
+The name sky130 represemts that the library is based on 130nm technology. Under the nomenclature, we define PVT - process, voltage and temperature. Process refers to the variations due to the fabrication, ie. there will variations in the silicon fabricated even by the same machine. There is variation due to the voltage and temperature as well. Silicon is very sensitive to temperature. All these 3 determines how the silicon is going to perform. We aim to design such that silicon works in all the conditions, across various variations. These three are indicated under the name, tt stands for typical process, 25c indicates the temperature - 25C and 1v80 indicates the voltage of 1.80volts. It is to be noted, all the models under the said library are designed for the given PVT parameters.
+
+We open the .lib file using gvim to go through various other informations it provides.
+![vsd day_2 walkthrough of lib sky130](https://github.com/simarthethi/iiitb-asic/assets/140998783/983dccad-65ff-4217-b270-0dcd770c8ac3)
+
+- It defines the technology begin used "CMOS" and the delay model as "table_lookup"
+- It defines the units for various parameters and quanities, such as, 1ns for time, 1V for voltage, 1mA for current, 1kohm for resistance and 1pF for capacitance.
+- It defines the operating conditions as "tt_025C_1v80".
+
+Considering a two input and gate, and compare different two input and gate.
+![vsd day_2 comparison btw and gates](https://github.com/simarthethi/iiitb-asic/assets/140998783/e933cdc5-24ab-4748-a94f-6d314459b441)
+
 <details>
 <summary> Heirarchial vs Flat Synthesis </summary>
 Under this section, we go over what is heirchial synthesis and flat synthesis. For this, we have taken the case of multiple_modul2s.v from verilog files to have a better unstanding.
+
+
 
 ```bash
 simar-thethi@simar-thethi-Inspiron-3542:~/vsd/VLSI/sky130RTLDesignAndSynthesisWorkshop/verilog_files$ multiple_modules.v
