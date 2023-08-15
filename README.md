@@ -5,6 +5,8 @@ This github repository contains the progress made in asic
 
 [Day 1](#day-1)
 
+[Day 2](#day-2)
+
 ## Day 0
 
 <details>
