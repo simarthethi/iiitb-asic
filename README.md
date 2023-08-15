@@ -260,6 +260,7 @@ read_verilog -noattr good_mux_netlist.v
 ```
 ![vsd day_1 netlist diagram](https://github.com/simarthethi/iiitb-asic/assets/140998783/b9617e24-c0f7-47ec-9324-36637d712d64)
 </details>
+
 ## Day 2
 <details>
  <summary> Summary </summary>
@@ -292,6 +293,11 @@ We open the .lib file using gvim to go through various other informations it pro
 Considering a two input and gate, and compare different two input and gate.
 ![vsd day_2 comparison btw and gates](https://github.com/simarthethi/iiitb-asic/assets/140998783/e933cdc5-24ab-4748-a94f-6d314459b441)
 
+- The lib files conatins the power and timing information for the 4 possible outcomes.
+- All three taken cells are 2 input and gates, but differ in their areas, and2_4 has a larger area than area2_2 and consequently more than and2_0.
+- Having a larger area refers to the use of a wider cell. Wider cells will be faster, but consumes more power. This can be seen in the datials under the lib file.
+
+
 <details>
 <summary> Heirarchial vs Flat Synthesis </summary>
 Under this section, we go over what is heirchial synthesis and flat synthesis. For this, we have taken the case of multiple_modul2s.v from verilog files to have a better unstanding.
@@ -302,6 +308,28 @@ Under this section, we go over what is heirchial synthesis and flat synthesis. F
 simar-thethi@simar-thethi-Inspiron-3542:~/vsd/VLSI/sky130RTLDesignAndSynthesisWorkshop/verilog_files$ multiple_modules.v
 ```
 ![vsd day_2 gvimultiple module](https://github.com/simarthethi/iiitb-asic/assets/140998783/f08a2435-b0d5-4196-9413-42419fb33adf)
+
+Gate level diagram
+![Screenshot from 2023-08-16 00-21-41](https://github.com/simarthethi/iiitb-asic/assets/140998783/c2c11d4d-b7a4-4e0d-a920-d16e62f82c12)
+
+We go to the directory where we find the model in verilog files
+```bash
+$ cd Documents/ASICs/VLSI/sky130RTLDesignAndSynthesisWorkshop/verilog_files
+$ yosys
+read_liberty -lib ~/Documents/ASICs/VLSI/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog multiple_modules.v
+synth -top multiple_modules
+abc -liberty ~/Documents/ASICs/VLSI/sky130RTLDesignAndSynthesisWorkshop/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+show multiple_modules
+```
+**Reading and Synthesis of the said module**
+![vsd day_2 multiple module yosys](https://github.com/simarthethi/iiitb-asic/assets/140998783/f689253a-3682-4080-b4aa-06ac8d1436c7)
+![vsd day_2 reading verilog file](https://github.com/simarthethi/iiitb-asic/assets/140998783/af199fa9-8b89-413c-8619-191c19e687b1)
+![vsd day_2 generate netlist m_m](https://github.com/simarthethi/iiitb-asic/assets/140998783/ce6f9abf-f5e4-493f-ad6d-503905bd9300)
+
+- we hit show and expect to attain a similar schematic we had drew
+  ![vsd day_2 show graphical rep of m_m](https://github.com/simarthethi/iiitb-asic/assets/140998783/31a1f607-589b-44f1-b463-b5b793512e67)
+
 
 
 
