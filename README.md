@@ -131,3 +131,5 @@ Simulator is the tool used for simulating the design.
 
 The simulator looks for changes on the input signls. Upon chnages to he input the output is evaluated 
 
+![vsd day_1 simulator](https://github.com/simarthethi/iiitb-asic/assets/140998783/2dcfe72c-25b7-4b2f-8382-0553551bf6b5)
+
