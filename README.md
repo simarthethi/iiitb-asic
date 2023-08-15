@@ -402,7 +402,7 @@ Types of flops
 
 Now, we go through simuations of async reset, async set and sync async reset and observe the waveforms using gtkwave to have a better understand.
 
-**RTL code**
+**RTL code for dff_asyncres**
 ```bash
 module dff_asyncres ( input clk ,  input async_reset , input d , output reg q );
 always @ (posedge clk , posedge async_reset)
@@ -417,6 +417,12 @@ endmodule
 On execution of iverilog and gtkwave we get
 ![vsd day_2 dff asyncres](https://github.com/simarthethi/iiitb-asic/assets/140998783/63ca8084-3fb8-4bc6-a631-690fd92672d0)
 ![vsd day_2 gtkwave dff asyncres](https://github.com/simarthethi/iiitb-asic/assets/140998783/00e0eca2-13f9-41eb-9ed1-7604185aa593)
+- We can observe that the output q goes to 0 when the reset is encountered.
+- Now we synthesis the design using yosys.
+
+![vsd day_2yosys dff asyncres](https://github.com/simarthethi/iiitb-asic/assets/140998783/e8c03f69-9d14-4824-bf0a-535504d8bec8)
+![vsd day_2 reading dff ayncres](https://github.com/simarthethi/iiitb-asic/assets/140998783/dd54d587-e4e1-4128-8a79-68370e35b5e2)
+
 
 
 
