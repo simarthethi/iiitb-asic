@@ -388,7 +388,35 @@ but because of the delay, we get outout as 0 for a brief period of 2ns.
 - We use a D flipflop. They are a storage element. They are placed between combinational circuits and changes value only at clock edge.
 ![Screenshot from 2023-08-16 01-19-10](https://github.com/simarthethi/iiitb-asic/assets/140998783/6f21888e-78ba-4fb3-a203-feb739b160ac)
 
+- We need to initailise the flops, else the combinational circuits gives a garbage value. For this purpose we have reset and set pins. They can be asynchoronous and synchronous.
 
+Types of flops
+
+- Flops can be designed to be asynchronous or synchronous. It depends on whether the flop is sensitive to the reset and set parameters.
+- Under asynchronous, the flop is sensitive to the reset or set, ie the design checks for them and the moment, reset is encountered, the output is pulled to 0 irrespective of the clock. For asynchronous set, the output is pulled to 1.
+- The circuit design and timing diagram along with verilog code is displayed under the image below under column 1.
+- Under the case of synchronous reset, the output is pulled to 0 at the next clock cycle. The design and timing diagram along the verilog code is shown under the column 2 of the image below.
+- Sync reset can be understodd as the input is pulled to 0, thus output becomes 0 for next clock cycle.
+
+![Screenshot from 2023-08-16 01-22-20](https://github.com/simarthethi/iiitb-asic/assets/140998783/770b73ce-325c-42c9-9e86-35995680fd99)
+
+Now, we go through simuations of async reset, async set and sync async reset and observe the waveforms using gtkwave to have a better understand.
+
+**RTL code**
+```bash
+module dff_asyncres ( input clk ,  input async_reset , input d , output reg q );
+always @ (posedge clk , posedge async_reset)
+begin
+	if(async_reset)
+		q <= 1'b0;
+	else	
+		q <= d;
+end
+endmodule
+```
+On execution of iverilog and gtkwave we get
+![vsd day_2 dff asyncres](https://github.com/simarthethi/iiitb-asic/assets/140998783/63ca8084-3fb8-4bc6-a631-690fd92672d0)
+![vsd day_2 gtkwave dff asyncres](https://github.com/simarthethi/iiitb-asic/assets/140998783/00e0eca2-13f9-41eb-9ed1-7604185aa593)
 
 
 
