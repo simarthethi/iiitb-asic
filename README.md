@@ -340,8 +340,30 @@ write_verilog -noattr multiple_modules_hier.v
 !gvim multiple_modules_hier.v  
 ```
 ![gvim of m_ hiererchial](https://github.com/simarthethi/iiitb-asic/assets/140998783/017232f1-274d-4a29-b288-aafd55ab7a3c)
+![vsd day_2 gvim m_m hiererchial pt2](https://github.com/simarthethi/iiitb-asic/assets/140998783/aff0388c-a5d1-4d54-a903-243277e659fc)
 
+- In the netlist generated, it is observed that the hierarchy is maintained. The top module has instances of sub moduke 1 and 2, and the two modules are seperately defined implementing the and and or gates.
+- It is to be more, since this is CMOS technology, we implement the gates using a nand gate with inverted inputs for or gate and nor gate with inverted inputs for and gate.
 
+Now we will look into flat design techcnique.
+```bash
+write_verilog -noattr multiple_modules_flat.v
+!gvim multiple_modules_flat.v
+```
+![vsd day_2 gvim m_m flattop synthesis](https://github.com/simarthethi/iiitb-asic/assets/140998783/4f3fb545-0eb5-4a0b-ac0d-a9d595935eaf)
+![flattop synthesis pt2](https://github.com/simarthethi/iiitb-asic/assets/140998783/7700a0f5-c504-4388-94b8-9f621a23028a)
+
+- In the new netlist, we don't see any instances of submodules such as u1 and u2.
+- We get direct instances of and and or gates under the flat design.
+- This type of design is known as flat desigin techniques.
+
+```bash
+flatten
+show multiple_modules
+```
+![vsd day_2 show multiple module flat](https://github.com/simarthethi/iiitb-asic/assets/140998783/75a2d5e4-4bce-4b08-adcb-d3e6037e3f76)
+We saw how to synthesis the top module, now we will look into synthesis of submodules.
+![vsd say_2 show sub_module 1](https://github.com/simarthethi/iiitb-asic/assets/140998783/e7a8c22e-b586-47e0-8e14-e18bf1977fa9)
 
 
 
