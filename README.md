@@ -126,10 +126,10 @@ This section shows how I simulated and synthesized a 2x1 mux using iverilog and 
 <details>
 
 <summary> Introduction to RTK design and Synthesis </summary>
-** Simulator **: The RTL design is checked for adherence to the spec by simulating the design.
+**Simulator** : The RTL design is checked for adherence to the spec by simulating the design.
 Simulator is the tool used for simulating the design.
 ** RTL Design **: the RTL Design is the actual verilog code or set of codes which has the intended functionality to meet with the required specifications.
-** Testbench **: Testbench is the setup to apply stimulus to the design to check its functionality.
+**Testbench**: Testbench is the setup to apply stimulus to the design to check its functionality.
 
 The simulator looks for changes on the input signls. Upon chnages to he input the output is evaluated 
 
@@ -141,4 +141,82 @@ The output of the simulator is a VCD file(Value Change Dump file) which is viewe
 Simulation flow of verilog-
 ![Screenshot from 2023-08-15 22-45-36](https://github.com/simarthethi/iiitb-asic/assets/140998783/6f142380-b18b-4186-bde1-ccc82de6db1f)
 </details>
+<details>
+<summary> Introduction to Lab </summary>
+Under this we will go through how to setup the directory and lab for the course and how to access various files and execute.
+
+**Lab Setup**
+The first step under the lab setup is to form a seperate directory for VLSI and gotclone the couse files from https://github.com/kunalg123/sky130RTLDesignAndSynthesisWorkshop.git
+```bash
+$ cd vsd
+$ cd VLSI
+$ cd git clone https://github.com/kunalg123/sky130RTLDesignAndSynthesisWorkshop.git
+```
+Upon the cloning, a new folder with the name sky130RTLDesignAndSynthesisWorkshop is made. 
+Under this folder, there will be several folders, such as lib which contains the standard set 
+library for sky130 which will be used for the synthesis, verilog_files which contains all the 
+source files and testbenches for the experiments to be done.
+
+**Working with iverilog and gtkwave**
+Under this, we go over how load files on iverilog and visualise using gtkwave. The terminal is 
+opened and the directory is set to the verilog_files, where various source files and their 
+respective testbenches are stored. Under this example we will execute the mux using good_mux.v 
+and check the functionality using gtkwave to visualise the dumpfile generated. Both the source 
+file and testbench are loaded to iverilog.
+```bash
+$vsd
+$ cd VLSI
+$ cd sky130RTLDesignAndSynthesisWorkshop
+$ cd verilog_files/
+$ ls
+$ iverilog good_mux.v tb_good_mux.v
+$ ./a.out
+$ gtkwave tb_good_mux.vcd
+```
+![vsd day1](https://github.com/simarthethi/iiitb-asic/assets/140998783/ba50c87d-b69c-4cb3-bbf9-e18f3cba145d)
+![vsd_day1 libraries](https://github.com/simarthethi/iiitb-asic/assets/140998783/4cf0d6d0-0d06-4f7e-9bdf-a2829e3744ac)
+**Waveform on GTKWave**
+![vsd day_1 gtk wave](https://github.com/simarthethi/iiitb-asic/assets/140998783/e1c842e3-05f4-4f0f-96cd-e09957e7e9f7)
+the waveformon gtkwave is used to check the variations in the output with input.
+
+**MUX code**
+To read the code one can use the gvim command and access both the source and testbench
+```bash
+$ gvim tb_good_mux.v -o good_mux.v
+```
+**the Source and testbench code**
+![Screenshot from 2023-08-13 00-01-25](https://github.com/simarthethi/iiitb-asic/assets/140998783/c50eb689-e502-46ba-b54b-5cc653bea8a0)
+</details>
+<details>
+<summary> introduction to Yosys and Logic synthesis </summary>
+
+The RTL design is the behavioural model of the said specification written in an HDL language. For 
+mapping this code to a hardware circuit comes the synthesis. The RTL code is translated to gate 
+level using the front end libraries that are .lib files, through synthesis the netlist file is 
+derived.
+
+The front end library is also called .lib, which can be explained as a collection for modules for 
+the logic gates for the mapping. It contains various types of the same logic gate, such as 2 and 
+3 input and gates, and modules for the same gate with different execution speed, which can de 
+decided upon the usecase and required specification. The speed of the gates depends the load, 
+which for digital circuits are capacitors, thus charging and discharging of capacitors determine 
+the speed of the gate, thus the system. For faster speed, we need transistor with more current 
+sourcing capacity. Thus the need for wider transistors. But wider transistors enables faster 
+processes with the trade off of power and area. Narrow transistors comsumes lesser area and 
+power, but comes with bigger delays. Thus the choice of the gate models is made accordingly. The 
+time delat should small enough to cover the propogation delay and setup times and at the same
+time large enough that it doesn't cause a hold crisis, that is its bigger than the hold time of 
+the next gate in process.
+
+One has to guide the synthesizer for the required execution time, ie, the use of faster and slower transistor models while mapping. This is known as constraints.
+
+The synthesizer used under this coursework is Yosys.
+
+Yosys setup flow- 
+![Screenshot from 2023-08-15 23-19-06](https://github.com/simarthethi/iiitb-asic/assets/140998783/2c4c6c27-5d4d-4b11-9437-c8543339f9cf)
+The design block has the function read_design and .lib has a read_liberty function which reads the design file and .lib respectively. The netlist block has the fucntion read_netlist which upon execution generates the netlist file for the given design. It is to note design file and netlist file are two different representations for the same given specification.
+
+Synthesis verification flow
+![Screenshot from 2023-08-15 23-20-39](https://github.com/simarthethi/iiitb-asic/assets/140998783/8371c5eb-7090-4c3a-9e46-d718ae9e3a80)
+To verify the synthesis output, we use the iverilog simulator which is given the netlist and testbench as inputs, attain a vcd file, which is visualised using gtkwave. The output on the gtkwave with the netlist file should be the same as in the case of RTL simulation. Since the primary inputs and outputs in case of RTL designs and netlist design remains the same, the same testbench can be used to verify the design.
 
