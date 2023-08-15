@@ -250,5 +250,17 @@ $ yosys
 ![Screenshot from 2023-08-13 20-55-19](https://github.com/simarthethi/iiitb-asic/assets/140998783/68eb5bab-cc9b-402d-995e-b80974ed5adc)
 ![vsd day_1 graphical version of logic](https://github.com/simarthethi/iiitb-asic/assets/140998783/98548ea5-3b96-4576-8a48-e091f3980849)
 
+- The netlist file is wriiten using write_verilog followed by the name for the file.
+- Gvim edittor is used view the netlist file.
+```bash
+read_verilog -noattr good_mux_netlist.v
+!gvim good_mux_netlist.v
+```
+![vsd day_1 netlist diagram](https://github.com/simarthethi/iiitb-asic/assets/140998783/b9617e24-c0f7-47ec-9324-36637d712d64)
+</details>
+
+
+
+
 
 
