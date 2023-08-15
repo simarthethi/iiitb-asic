@@ -2,6 +2,9 @@
 This github repository contains the progress made in asic 
 
 [Day 0](#day-0)
+
+[Day 1](#day-1)
+
 ## Day 0
 
 <details>
@@ -112,4 +115,19 @@ screenshot of magic successfully launched
 ![Screenshot from 2023-08-01 11-28-30](https://github.com/simarthethi/iiitb-asic/assets/140998783/9056e4bf-3fd2-4a07-8573-fd258089822e)
 
 
+## Day 1
+8
+<details>
+<summary> Summary </summary>
+This section shows how I simulated and synthesized a 2x1 mux using iverilog and yosys respectively. iverilog generates from the RTL design and its testbench a value changing dump file (vcd). gtkwave is the tool used to plot the simulation results of the design. Yosys is a tool which synthesizes RTL designs into a netlist. It is also used to test the synthesized netlist when we provide it with a testbench.
+
+</details>
+
+<summary> Introduction to RTK design and Synthesis </summary>
+**Simulator**: The RTL design is checked for adherence to the spec by simulating the design.
+Simulator is the tool used for simulating the design.
+**RTL Design**: the RTL Design is the actual verilog code or set of codes which has the intended functionality to meet with the required specifications.
+**Testbech**: Testbench is the setup to apply stimulus to the design to check its functionality.
+
+The simulator looks for changes on the input signls. Upon chnages to he input the output is evaluated 
 
