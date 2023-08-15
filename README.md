@@ -296,7 +296,7 @@ Considering a two input and gate, and compare different two input and gate.
 - The lib files conatins the power and timing information for the 4 possible outcomes.
 - All three taken cells are 2 input and gates, but differ in their areas, and2_4 has a larger area than area2_2 and consequently more than and2_0.
 - Having a larger area refers to the use of a wider cell. Wider cells will be faster, but consumes more power. This can be seen in the datials under the lib file.
-
+</details>
 
 <details>
 <summary> Heirarchial vs Flat Synthesis </summary>
@@ -330,6 +330,16 @@ show multiple_modules
 - we hit show and expect to attain a similar schematic we had drew
   ![vsd day_2 show graphical rep of m_m](https://github.com/simarthethi/iiitb-asic/assets/140998783/31a1f607-589b-44f1-b463-b5b793512e67)
 
+
+- We get the image of the top module.
+- We don't get to see the and and or gates. We see the modules u1 and u2, which are the instances of the gates.
+- **This type of design is called an heirarchial design.**
+- We generate the netlist file for the design.
+```bash
+write_verilog -noattr multiple_modules_hier.v
+!gvim multiple_modules_hier.v  
+```
+![gvim of m_ hiererchial](https://github.com/simarthethi/iiitb-asic/assets/140998783/017232f1-274d-4a29-b288-aafd55ab7a3c)
 
 
 
