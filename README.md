@@ -214,7 +214,10 @@ The synthesizer used under this coursework is Yosys.
 
 Yosys setup flow- 
 ![Screenshot from 2023-08-15 23-19-06](https://github.com/simarthethi/iiitb-asic/assets/140998783/2c4c6c27-5d4d-4b11-9437-c8543339f9cf)
-The design block has the function read_design and .lib has a read_liberty function which reads the design file and .lib respectively. The netlist block has the fucntion read_netlist which upon execution generates the netlist file for the given design. It is to note design file and netlist file are two different representations for the same given specification.
+The design block has the function read_design and .lib has a read_liberty function which reads the design file and .lib 
+respectively. The netlist block has the fucntion read_netlist which upon execution generates the netlist file for the 
+given design. It is to note design file and netlist file are two different representations for the same given 
+specification.
 
 Synthesis verification flow
 ![Screenshot from 2023-08-15 23-20-39](https://github.com/simarthethi/iiitb-asic/assets/140998783/8371c5eb-7090-4c3a-9e46-d718ae9e3a80)
