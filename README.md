@@ -707,7 +707,65 @@ end
 
 endmodule
 ```
--Simulation using iverilog and yosys
+- Simulation using iverilog and yosys
+![vsd day_3 dff const2 gtkwave](https://github.com/simarthethi/iiitb-asic/assets/140998783/a3e79097-aab1-4e1a-b36e-cee7ab287d04)
+- optimization using yosys
+![vsd_day3 dff const2 optimized](https://github.com/simarthethi/iiitb-asic/assets/140998783/61312886-25c4-4840-9181-ff5e2d14516a)
+
+**Lab_3 dff_const3.v**
+**RTL code**
+```bash
+module dff_const2(input clk, input reset, output reg q);
+module dff_const3(input clk, input reset, output reg q);
+reg q1;
+
+always @(posedge clk, posedge reset)
+begin
+	if(reset)
+	begin
+		q <= 1'b1;
+		q1 <= 1'b0;
+	end
+	else
+	begin
+		q1 <= 1'b1;
+		q <= q1;
+	end
+end
+
+endmodule
+```
+-simaulation using iverilog and gtkwave
+![vsd day_3 dff const3 gtkwave](https://github.com/simarthethi/iiitb-asic/assets/140998783/0929ca11-3c57-4b02-81fe-7c852c639f36)
+-optimization using yosys
+![vsd day_3 dff const3 optimized](https://github.com/simarthethi/iiitb-asic/assets/140998783/7f4abd61-ba2a-4c14-bc6a-237cfaff5c74)
+
+**Lab_4 dff_const4.v**
+**RTL code**
+```bash
+module dff_const4(input clk, input reset, output reg q);
+reg q1;
+
+always @(posedge clk, posedge reset)
+begin
+	if(reset)
+	begin
+		q <= 1'b1;
+		q1 <= 1'b1;
+	end
+	else
+	begin
+		q1 <= 1'b1;
+		q <= q1;
+	end
+end
+
+endmodule
+```
+-Simulation using iverilog and gtkwave
+![vsd day_3 dff const4 gtkwave](https://github.com/simarthethi/iiitb-asic/assets/140998783/a7cf35e9-8991-4f3d-9086-c77e7b44a12c)
+-optimization using yosys
+![vsd day_3 dff const4 optimized](https://github.com/simarthethi/iiitb-asic/assets/140998783/d9f5472b-57ae-47d6-9c11-ade0bced8a5d)
 
        
 
