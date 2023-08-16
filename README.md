@@ -850,7 +850,7 @@ end
 
 ## Day 4
 <details>
-<summary> Summary <summary>
+<summary> Summary </summary>
 performed Gate Level Simulation (GLS). GLS is when the testbench is run with the netlist as 
 design under test to ensure there are no synthesis and simulation mismatches, and it is important 
 as it 1-) verifies the logical correctness of the post-synthesis design and 2-) ensures the 
@@ -863,11 +863,152 @@ non-blocking should be used with sequential circuits. Note that the synthesis wi
 circuit with blocking and non-blockin; it will yield what would be obtained as if the statements 
 where written in non-blocking format, so in case they weren't written as such a mismatch will 
 occur with the simulation), and non-standard verilog coding.
+</details>
 
+<details>
+<summary> GLS, Synthesis-Simulation mismatch and Blocking,Non-blocking statements </summary>
+**GLS concepts and flow**
+What is GLS-Gate Level Simulation?
+GLS is generating the simulation output by running test bench with netlist file generated from 
+synthesis as design under test. Netlist is logically same as RTL code, therefore, same test bench 
+can be used for it.
 
+Why GLS?
+We perform this to verify logical correctness of the design after synthesizing it. Also ensuring 
+the timing of the design is met.
 
+Below picture gives an insight of the procedure. Here while using iverilog, we also include gate 
+level verilog models to generate GLS simulation.
+![Screenshot from 2023-08-16 10-10-17](https://github.com/simarthethi/iiitb-asic/assets/140998783/f3254e33-17b1-4e83-9564-9f490256d985)
 
+**Synthesis Simulation Mismatch**
+There are three main reasons for Synthesis Simulation Mismatch:
+      -Missing sensitivity lis in always block
+      -blocking vs non-blocking assignments
+      -Non standard verilog coding
+*Missing Sensitivity List*
+To understand this we use examples for a mux with different sensitivity
 
+-Code 1
+```bash
+module mux1 (input sel , i0, i1 ,
+output reg y);
 
+always@(sel)
+begin
+if(sel)
+	y=i1;
+else
+	y=i0;
+end
 
+endmodule
+```
+-Code 2
+```bash
+module mux (input sel , i0, i1 ,
+output reg y);
 
+always@(*) 
+begin
+if(sel)
+	y=i1;
+else
+	y=i0;
+end
+
+endmodule
+```
+- Mux 1 is sensitive to changes is changes in latches, ie the output y will change only at the changes of sel. Thus the changes of inputs i1 and i0 are not displayed in the output.
+- Mux 2 is sensitive to all three, so when high sel, output covers all changes in i1, and for low sel, all changes in i0 are covered.
+- Now, the simulation and synthesis of mux 2 wont have any mismatch.
+- But mux1 will have mismatch,as simulators work on sensitivity list and the simulation will behave as a double edge triggered latch, while the synthesizer converts the logic into netlist and doesn't look into sensitivity list, thus synthesis will behave as a 2 input MUX.
+
+*Blocking and Non-blocking statements*
+Blocking statements execute the statemetns in the order they are written inside the always block. 
+Non-Blocking statements execute all the RHS and once always block is entered, the values are 
+assigned to LHS. This will give mismatch as sometimes, improper use of blocking statements can 
+create latches.
+</details>
+<details>
+<summary> Lab- GLS Synth Simulation Mismatch </summary>
+
+**Lab_1 ternary_operator_mux.v**
+**RTL code**
+```bash
+module ternary_operator_mux (input i0 , input i1 , input sel , output y);
+	assign y = sel?i1:i0;
+endmodule
+```
+- Simulation using iverilog and yosys
+![vsd day_4 ternary opt mux gtkwave](https://github.com/simarthethi/iiitb-asic/assets/140998783/5fea5a54-8d17-4474-bba5-80814a15f877)
+- now we synthesis using yosys
+![vsd day_4 ternary opt mux rep](https://github.com/simarthethi/iiitb-asic/assets/140998783/36e4b12e-bf63-4fe9-b320-8557d3290f3a)
+- generated netlist
+![ternary opt mux netlist](https://github.com/simarthethi/iiitb-asic/assets/140998783/6302ab44-d863-4b35-a82c-30836382b975)
+-Running GLS using the netlist file generated during yosys
+![vsd day_4 ternary opt mux gtkwave](https://github.com/simarthethi/iiitb-asic/assets/140998783/751550ac-e06f-4154-82d9-7952c37582b2)
+**it is clear that both simulatons are same**
+
+**Lab_2 bad_mux.v**
+**RTL code**
+```bash
+
+module bad_mux (input i0 , input i1 , input sel , output reg y);
+always @ (sel)
+begin
+	if(sel)
+		y <= i1;
+	else 
+		y <= i0;
+end
+endmodule
+```
+- Simulation using iverilog and gtkwave
+![vsd day_4 bad mux gtkwave before synthesis](https://github.com/simarthethi/iiitb-asic/assets/140998783/b4e41291-3f57-491b-9b28-b63bddea772e)
+- synthesis using Yosys
+![vsd day_4 bad mux synthesis graphical rep](https://github.com/simarthethi/iiitb-asic/assets/140998783/773e30b0-6a3d-4af9-b610-ee91e184caac)
+- netlist generated during synthesis
+![bad mux netlist](https://github.com/simarthethi/iiitb-asic/assets/140998783/ac877677-9d5c-4206-8636-902a6a9e41b7)
+- Running GLS using netlist file generated during yosys
+![vsd day_4 bad_mux gtkwave after synthesis ](https://github.com/simarthethi/iiitb-asic/assets/140998783/2c19cc52-e422-46cd-8683-f7d9ab7b29f2)
+- Under this, we see a clear mismatch between the simulation and synthesis designs. The RTL file
+and netlist files aren't the same logic implemention. This happened due to the sensitivity
+listing under the RTL file.
+</details>
+<details>
+<summary> Lab on Synthesis_Simulation Mismatch and Blocking </summary>
+In thissection we willlook into the mismatch between simulation and synthesis caused due to the blocking statements.
+	
+**RTL code**
+```bash
+module blocking_caveat (input a , input b , input  c, output reg d); 
+reg x;
+always @ (*)
+begin
+	d = x & c;
+	x = a | b;
+end
+endmodule
+```
+- Running the simulation using iverilog and gtkwave
+![vsdday_4 caveat gtkwave](https://github.com/simarthethi/iiitb-asic/assets/140998783/64c9b28b-0f3e-4cf8-b142-9fa03b31f12f)
+- Synthesis using yosys
+![vsd day_4 blocking caveat graph repo](https://github.com/simarthethi/iiitb-asic/assets/140998783/c700acb8-26bb-41e8-8aa2-f0f0ac8da629)
+- Netlist generated
+![blocking caveat netlist](https://github.com/simarthethi/iiitb-asic/assets/140998783/d0f5a262-35f1-40ff-8fa6-e0e077ccff7f)
+- Running GLS on the netlist file generated using iverilog and gtkwave
+![gtkwaave blocking caveat after synthesis](https://github.com/simarthethi/iiitb-asic/assets/140998783/ebcf9efc-9385-4077-9666-4ea88154c07d)
+  
+- It is seen that the waveform matches with the expected output for d=((a|b).c).
+- There is clear mismatch between the simulation and synthesis in this case. This happended coz
+we used blocking statements, and while simulation, the design makes a flop, which wasn't the
+intention of the original design.
+</details>
+
+## Day 5
+
+<details>
+<summary> Summary </summary>
+I have first learned about "if" and "case" statements which are used inside always blocks.
+</details>
