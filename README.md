@@ -1243,3 +1243,101 @@ FOR Generate can be used to instantiate any number of sub modules with in a top 
 example, if we need a 32 bit ripple carry adder, instead of instantiating 32 full adders, we can 
 write a generate for loop and connect the full adders appropriately.
 </details>
+
+<details>
+<summary> LAB on **for** and **for generate** </summary>
+
+**LAB_1 mux using Generate**
+
+- Under this, we implement a mux using for loop.
+- Advantage of this method over if-case method is that we don't have to write multiple lines.
+- For a 64 input mux, using if-case we need over 64 lines of code, whereas the same can be done under 5-6 lines using for loop.
+**RTL code for mux_generate.v**
+```bash
+module mux_generate (input i0 , input i1, input i2 , input i3 , input [1:0] sel  , output reg y);
+wire [3:0] i_int;
+assign i_int = {i3,i2,i1,i0};
+integer k;
+always @ (*)
+begin
+for(k = 0; k < 4; k=k+1) begin
+	if(k == sel)
+		y = i_int[k];
+end
+end
+endmodule
+```
+- Running RTL simulation using and gtkwave
+![vsd day_5 mu_generate gtkwave](https://github.com/simarthethi/iiitb-asic/assets/140998783/953a29a1-ada4-4f8e-b1e0-6fce9ac82153)
+- Synthesis using yosys
+![vsd day_5 mux generate synthesis](https://github.com/simarthethi/iiitb-asic/assets/140998783/c12a66fe-5b0e-45e0-8033-7a8b40678902)
+![mux_generate show](https://github.com/simarthethi/iiitb-asic/assets/140998783/54bf882d-10e7-4921-abc0-82109db6334e)
+- Running GLS using iverilog and gtkwave after generationg netlist using yosys
+![post synthesis mux geneate gtkwvae](https://github.com/simarthethi/iiitb-asic/assets/140998783/00cbfb0b-a7b8-43ef-b4cb-e0978de213f5)
+- It is observed that both the RTL simulation and GLS have same output waveform. Thus we have
+the correct design.
+
+**LAB_2 demux using generate**
+Under this, We follow up with the implementation of demux
+
+**RTL code for demux_generate.v**
+```bash
+module demux_generate (output o0 , output o1, output o2 , output o3, output o4, output o5, output o6 , output o7 , input [2:0] sel  , input i);
+reg [7:0]y_int;
+assign {o7,o6,o5,o4,o3,o2,o1,o0} = y_int;
+integer k;
+always @ (*)
+begin
+y_int = 8'b0;
+for(k = 0; k < 8; k++) begin
+	if(k == sel)
+		y_int[k] = i;
+end
+end
+endmodule
+```
+- Simulation using iverilog and gtkwave
+![demux gtkwave](https://github.com/simarthethi/iiitb-asic/assets/140998783/e00d4fa3-60a2-40ec-8399-f2a18d88fab2)
+- Syntheis using yosys
+![demux synthesis show](https://github.com/simarthethi/iiitb-asic/assets/140998783/681d567a-223a-4422-b01b-af002420f0a9)
+- Running GLS using iverilog and gtkwave after generating netlist on yosys
+![demux gtkwave](https://github.com/simarthethi/iiitb-asic/assets/140998783/3a9e32c9-1915-41fd-8543-c152d73797dd)
+- We see that both the waveforms for GLS and RTL simulation are the same. Thus we have the correct logic implementataion for demux.
+
+**LAB_3 ripple carry adder**
+
+- Under this, we look into implementation of an 8 bit ripple carry adder.
+- In this we need 8 single bit adders, that is instantiate single bit full adder 8 times. We implement generate for for making this into a simple and shorter code.
+
+**RTL code for rca.v**
+```bash
+module rca (input [7:0] num1 , input [7:0] num2 , output [8:0] sum);
+wire [7:0] int_sum;
+wire [7:0]int_co;
+
+genvar i;
+generate
+	for (i = 1 ; i < 8; i=i+1) begin
+		fa u_fa_1 (.a(num1[i]),.b(num2[i]),.c(int_co[i-1]),.co(int_co[i]),.sum(int_sum[i]));
+	end
+
+endgenerate
+fa u_fa_0 (.a(num1[0]),.b(num2[0]),.c(1'b0),.co(int_co[0]),.sum(int_sum[0]));
+
+
+assign sum[7:0] = int_sum;
+assign sum[8] = int_co[7];
+endmodule
+```
+- RTL simulation using iverilog and gtkwave
+![vsd day_5  rca gtkwave](https://github.com/simarthethi/iiitb-asic/assets/140998783/711cda0d-1c87-428f-9892-c7ca8cc9fc30)
+- synthesis using yosys and rca grahical representaion
+![vsd day_5 rca show](https://github.com/simarthethi/iiitb-asic/assets/140998783/34511043-9e31-4a5f-9ba2-aa1a90c8950f)
+- show fa
+![vsdday_5 fa show](https://github.com/simarthethi/iiitb-asic/assets/140998783/377bb07e-15b4-4e1b-b69f-914363061a06)
+- Running GLS using iverilog and gtkwave after generating a netlist using yosys
+![vsd day_rca post synthesis gtkwave](https://github.com/simarthethi/iiitb-asic/assets/140998783/5e8ebbfd-aa3b-4b07-95bc-f4b50ef4a090)
+- We see the same simulation and GLS waveform, thus the ripple carry adder logic is correct and
+has been correctly synthesizer. The advantage of using generate for is that we have to
+instantiate once and the code multiple copies, ie multiple instances as defined.
+</details>
