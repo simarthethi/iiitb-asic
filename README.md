@@ -1070,8 +1070,8 @@ but it continues further.
 **Caveats in Case**
 Caveats in case occur due to two reasons. One is **incomplete case statements** and the other is **partial assignments in case statements**.
 </details>
-
-<summary> Lab on Incomplete *if* </summary>
+<details>
+<summary> Lab on Incomplete *if*</summary>
 
 **LAB_1 incomp_if**
 **RTL code for incom_if.v**
