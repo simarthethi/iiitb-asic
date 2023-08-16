@@ -1117,3 +1117,129 @@ condtional statements.
 </details>
 <details>
 <summary> LAB on **case** construst </summary>
+Here we'll look into various situations with case statement under simulation and synthesis
+
+**LAB_1 wihout default**
+We look into the formation of inffered latcg due toomission of default case.
+
+**RTL code for incomp_case.v**
+```bash
+module incomp_case (input i0 , input i1 , input i2 , input [1:0] sel, output reg y);
+always @ (*)
+begin
+	case(sel)
+		2'b00 : y = i0;
+		2'b01 : y = i1;
+	endcase
+end
+endmodule
+```
+- Running RTL simulation using iverilog and gtkwave
+![vsd day_5 incom_case simulation](https://github.com/simarthethi/iiitb-asic/assets/140998783/5b311344-175a-4d74-b750-d5ebe71f1b3c)
+- synthesis using yosys
+![vsd day_5 synthesis incomp_case](https://github.com/simarthethi/iiitb-asic/assets/140998783/723ff490-8f67-4207-a24a-cdabb8302e80)
+![vsd day_5 incomp case show](https://github.com/simarthethi/iiitb-asic/assets/140998783/fb4ced45-ffc8-46fa-9684-199b146925f8)
+- It is seen due to omission of default case we have an inferred latch in hardware design
+
+  **LAB_2 with default**
+  We'll look into how default cae removes the frmation of a latch
+
+  **RTL code for comp_case.v**
+  ```bash
+  module comp_case (input i0 , input i1 , input i2 , input [1:0] sel, output reg y);
+  always @ (*)
+  begin
+	case(sel)
+		2'b00 : y = i0;
+		2'b01 : y = i1;
+		default : y = i2;
+	endcase
+  end
+  endmodule
+  ```
+- Running simulation using verilog and gtkwave
+![vsd day_5 comp_case gtkwave](https://github.com/simarthethi/iiitb-asic/assets/140998783/4bd1f25f-76ad-4a5a-8263-a0021e5a3311)
+- running synthesis using yosys
+![vsd day_5 comp_case synthesis](https://github.com/simarthethi/iiitb-asic/assets/140998783/559201e0-6067-4c47-85fe-9c1fc0c15a33)
+![vs day_5 comp_case show](https://github.com/simarthethi/iiitb-asic/assets/140998783/f20a705b-3b9c-42ac-b5b9-1dd5a14a694b)
+- here we see no inferred latch
+
+**LAB_3 partial case assignment**
+we look into how partial case assignments cause the formation of inferred latch.
+
+**RTL code for partial _case_assign.v**
+```bash
+module partial_case_assign (input i0 , input i1 , input i2 , input [1:0] sel, output reg y , output reg x);
+always @ (*)
+begin
+	case(sel)
+		2'b00 : begin
+			y = i0;
+			x = i2;
+			end
+		2'b01 : y = i1;
+		default : begin
+		           x = i1;
+			   y = i2;
+			  end
+	endcase
+end
+endmodule
+```
+- Running simulation using iverilog and gtkwave
+![Screenshot from 2023-08-16 19-25-50](https://github.com/simarthethi/iiitb-asic/assets/140998783/deae3245-013e-4612-bb61-cbee4554b29d)
+- Synthesis using yosys
+![partial case assign synthesis](https://github.com/simarthethi/iiitb-asic/assets/140998783/5e479854-53ba-431f-ab1f-55ffffc5c2be)
+![partial case assign show](https://github.com/simarthethi/iiitb-asic/assets/140998783/9b0c4465-b497-4b9a-a768-30802fc5937d)
+- Its is noticed that we have a latch in the design of the hardware even when we didn't had one in RTL file. This is due to the partial case assignment.
+
+**LAB_4 the bad Case**
+Under this, we look into the case of a bad case, which has simulation synthesis mismatch due to 
+the improper assignment for case 1'b1?. This leads to formation of inferred latches.
+
+**RTL code for bad_case.v**
+```bash
+module bad_case (input i0 , input i1, input i2, input i3 , input [1:0] sel, output reg y);
+always @(*)
+begin
+	case(sel)
+		2'b00: y = i0;
+		2'b01: y = i1;
+		2'b10: y = i2;
+		2'b1?: y = i3;
+		//2'b11: y = i3;
+	endcase
+end
+
+endmodule￼
+```
+- Simulation using iverilog and gtkwave
+![vsd day_5 bad case gtkwave](https://github.com/simarthethi/iiitb-asic/assets/140998783/dc006af1-1880-4887-811f-a84f9525ac46)
+- Synthesis using yosys
+![vsd day_5 bad_case synth](https://github.com/simarthethi/iiitb-asic/assets/140998783/7bb2c7a2-7282-4df0-ab47-de2f79bf2210)
+- Running GLS using iverilog and gtkwave fromnetlist obtained under synthesis
+![bad case post synthesis gtkwave](https://github.com/simarthethi/iiitb-asic/assets/140998783/e1c51e15-e2fa-45ee-a594-6accce683124)
+- We can see the mismatching under GLS and RTL simulation. This is due to improper assignment and formation of latches which weren't a part of the intended logic design.
+</details>
+
+<details>
+<summary> for loop and for generate </summary>
+	
+**For Loop**
+
+- For look is used in always block
+- It is used for excecuting expressions alone
+
+**Generate For loop**
+
+- Generate for loop is used for instantaing hardware
+- It should be used only outside always block
+
+For loop can be used to generate larger circuits like 256:1 multiplexer or 1-256 demultiplexer 
+where the coding style of smaller mux is not feesible and can have human errors since we would 
+need to include huge number of combinations.
+
+FOR Generate can be used to instantiate any number of sub modules with in a top module. For 
+example, if we need a 32 bit ripple carry adder, instead of instantiating 32 full adders, we can 
+write a generate for loop and connect the full adders appropriately.
+</details>
