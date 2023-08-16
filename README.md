@@ -575,11 +575,14 @@ Command to optimize the circuit by yosys is
 ```bash
 yosys> opt_clean -purge
 ```
-opt_clean remove unused cells and wires. The -purge switch removes internal nets if they have a public name. This command identifies wires and cells that are unused and removes them. This command can be used to clean up after the commands that do the actual work.
+opt_clean remove unused cells and wires. The -purge switch removes internal nets if they have a 
+public name. This command identifies wires and cells that are unused and removes them. This 
+command can be used to clean up after the commands that do the actual work.
 
 
 
-In case of multiple models, it is important to flatten the design then followup with optimization.
+In case of multiple models, it is important to flatten the design then followup with 
+optimization.
 
 **Lab 1-opt_check.v**
 **RTL code**
@@ -1067,3 +1070,50 @@ but it continues further.
 **Caveats in Case**
 Caveats in case occur due to two reasons. One is **incomplete case statements** and the other is **partial assignments in case statements**.
 </details>
+
+<summary> Lab on Incomplete *if* </summary>
+
+**LAB_1 incomp_if**
+**RTL code for incom_if.v**
+```bash
+module incomp_if (input i0 , input i1 , input i2 , output reg y);
+always @ (*)
+begin
+	if(i0)
+		y <= i1;
+end
+endmodule
+```
+- simulation using iverilog and gtkwave
+![vsd day_5 incom_if gtkwave](https://github.com/simarthethi/iiitb-asic/assets/140998783/29b90c22-cb5c-4c8c-ac67-238c29b7cd41)
+- synthesis using yosys
+![vsd day_5 incomp_if synthesis](https://github.com/simarthethi/iiitb-asic/assets/140998783/e1a4e220-8620-4c00-8253-378ede40af1f)
+- It is seen that there has been an inferred latch formation due to incomplete if-else
+condtional statements.
+
+**LAB_2 incomp_if2**
+**RTL code for incomp_if2.v**
+```bash
+
+module incomp_if2 (input i0 , input i1 , input i2 , input i3, output reg y);
+always @ (*)
+begin
+	if(i0)
+		y <= i1;
+	else if (i2)
+		y <= i3;
+
+end
+endmodule
+```
+- Simulation using iverilog and gtkwave
+![vsd day_5 incom_if2 gtkwave](https://github.com/simarthethi/iiitb-asic/assets/140998783/56f51005-8fd8-448c-b778-42f25d9311bb)
+- Synthesis using yosys
+![vsd day_5 incomp_if2 synth](https://github.com/simarthethi/iiitb-asic/assets/140998783/c7a0c01a-2003-4ee4-8f7d-9dce2a6d75b2)
+![vsd day_5 incomp_if2 show](https://github.com/simarthethi/iiitb-asic/assets/140998783/ce48e310-2d87-4e94-9130-ce6556610663)
+- It is seen that there has been an inferred latch formation due to incomplete if-else
+condtional statements.
+
+</details>
+<details>
+<summary> LAB on **case** construst </summary>
