@@ -863,7 +863,7 @@ non-blocking should be used with sequential circuits. Note that the synthesis wi
 circuit with blocking and non-blockin; it will yield what would be obtained as if the statements 
 where written in non-blocking format, so in case they weren't written as such a mismatch will 
 occur with the simulation), and non-standard verilog coding.
-</details>
+
 
 
 
