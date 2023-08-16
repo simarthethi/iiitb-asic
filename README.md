@@ -1012,3 +1012,58 @@ intention of the original design.
 <summary> Summary </summary>
 I have first learned about "if" and "case" statements which are used inside always blocks.
 </details>
+<details>
+<summary> If and Case constructs </summary>
+	
+***if costruct***
+The construct *if* is mainly used to create priority logic. In a nested if else construct, the 
+conditions are given priority from top to bottom. Only if the condition is satisfied, if 
+statement is executed and the compiler comes out of the block. If condition fails, it checks for 
+next condition and so on as shown below.
+**Syntax for nested if else**
+```bash
+if (<condition 1>)
+begin
+-----------
+-----------
+end
+else if (<condition 2>)
+begin
+-----------
+-----------
+end
+else if (<condition 3>)
+.
+.
+.
+```
+**Dangers of *if* construct**
+If use a bad coding style i.e, using incomplete if else constructs will infer a latch. We 
+definetly don't require an unwanted latch in a combinational circuit. When an incomplete 
+construct is used, if all the conditions are failed, the input is latched to the output and 
+hence we don't get desired output unless we need a latch.
+![IMG_20230816_111616](https://github.com/simarthethi/iiitb-asic/assets/140998783/ddf54009-3560-4056-bfd5-7810b133108f)
+
+***Case construct***
+**syntax**
+```bash
+case(statement)
+  case1: begin
+       --------
+	 --------
+	 end
+ case2: begin
+	     --------
+	 --------
+	 end
+ default:
+ endcase
+```
+In case construct, the execution checks for all the case statements and whichever satisfies the 
+statement, that particular statement is executed.If there is no match, the default statement is 
+executed. But here unlike if construct, the execution doesn't stop once statement is satisfied, 
+but it continues further.
+
+**Caveats in Case**
+Caveats in case occur due to two reasons. One is **incomplete case statements** and the other is **partial assignments in case statements**.
+</details>
